@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Token Example</title>
+</head>
+
+<body>
+    <h1>Welcome to the Token Example Page</h1>
+    <script>
+        // 当文档加载完毕时执行
+        window.onload = function () {            // 尝试从localStorage获取token
+            var token = localStorage.getItem('token');
+            // 将token发送到服务器进行验证
+            // 使用fetch API发送POST请求
+            fetch('/verify-token', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ Authorization: token })
+            })
+                .then(response => response.json())
+                .then(data => console.log(data))
+                .catch(error => console.error('Error:', error));
+
+        };
+    </script>
+</body>
+
+</html>
