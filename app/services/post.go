@@ -102,7 +102,7 @@ func CreateLove(love models.Love) (err error) {
 	return err
 }
 func GetLoveList(account string) (loveList []models.Love, err error) {
-	err = database.DB.Table("loves").Where("account=??", account).Find(&loveList).Error
+	err = database.DB.Table("loves").Where("account=?", account).Find(&loveList).Error
 	return loveList, err
 }
 

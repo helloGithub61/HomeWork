@@ -98,7 +98,7 @@ func UnlockUser(c *gin.Context) {
 		utils.JsonErrorResponse(c, 200507, "非管理员身份")
 		return
 	}
-	err = services.UpdateUserStatus(data.BanAccount, 1)
+	err = services.UpdateUserStatus(data.BanAccount, 0)
 	if err != nil {
 		utils.JsonErrorResponse(c, 200507, "解封失败")
 		return

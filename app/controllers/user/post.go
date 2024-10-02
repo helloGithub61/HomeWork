@@ -329,8 +329,10 @@ func GetLikePostList(c *gin.Context) {
 	var resList []models.Post
 	for _, love := range loveList {
 		if love.Like == 1 {
-			post, _ := services.GetPostByID(love.PostID)
-			resList = append(resList, *post)
+			post, err := services.GetPostByID(love.PostID)
+			if err == nil {
+				resList = append(resList, *post)
+			}
 		}
 	}
 	utils.JsonSuccess(c, resList)
@@ -349,9 +351,11 @@ func GetCollectPostList(c *gin.Context) {
 	}
 	var resList []models.Post
 	for _, love := range loveList {
-		if love.Like == 1 {
-			post, _ := services.GetPostByID(love.PostID)
-			resList = append(resList, *post)
+		if love.Collect == 1 {
+			post, err := services.GetPostByID(love.PostID)
+			if err == nil {
+				resList = append(resList, *post)
+			}
 		}
 	}
 	utils.JsonSuccess(c, resList)
