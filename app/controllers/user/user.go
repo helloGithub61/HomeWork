@@ -52,6 +52,7 @@ func ChangeUserName(c *gin.Context) {
 		utils.JsonErrorResponse(c, 200501, "参数错误")
 		return
 	}
+	data.Account = utils.GetAccountByToken(c.GetHeader("Authorization"))
 	// 用户是否存在
 	_, err := services.GetUserByAccount(data.Account)
 	if err != nil {
@@ -67,13 +68,6 @@ func ChangeUserName(c *gin.Context) {
 	utils.JsonSuccess(c, nil)
 }
 
-// type ChangeUserAvatar struct {
-// 	Account string `json:"account"`
-// }
-
-// func ChangeUserAvatar(c *gin.Context) {
-
-// }
 type BlockOtherData struct {
 	Account      string `json:"account"`
 	BlockAccount string `json:"block_account"`
@@ -111,6 +105,7 @@ func Search(c *gin.Context) {
 		utils.JsonErrorResponse(c, 200501, "参数错误")
 		return
 	}
+	data.Account = utils.GetAccountByToken(c.GetHeader("Authorization"))
 	// 用户是否存在
 	_, err := services.GetUserByAccount(data.Account)
 	if err != nil {
@@ -132,7 +127,7 @@ func Search(c *gin.Context) {
 }
 
 func GetHotRanking(c *gin.Context) {
-	Account := c.Query("account")
+	Account := utils.GetAccountByToken(c.GetHeader("Authorization"))
 	_, err := services.GetUserByAccount(Account)
 	if err != nil {
 		utils.JsonErrorResponse(c, 200507, "用户不存在")

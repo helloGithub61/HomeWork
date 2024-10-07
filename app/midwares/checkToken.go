@@ -3,7 +3,7 @@ package middleware
 import (
 	"CWall/app/models"
 	"CWall/app/services"
-
+	"fmt"
 
 	"net/http"
 
@@ -32,7 +32,9 @@ func TokenMiddleware(c *gin.Context) {
 		// 返回密钥的字节切片，用于验证令牌签名
 		return []byte(user.TKey), nil
 	})
-
+	fmt.Println("====")
+	fmt.Println(token.Claims.(*models.Claims).Account)
+	fmt.Println("====")
 	// 检查令牌是否有效
 	if _, ok := token.Claims.(*models.Claims); ok {
 		// 解析成功有效

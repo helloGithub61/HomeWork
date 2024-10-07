@@ -9,7 +9,7 @@ import (
 
 type GetAllReportListData struct {
 	Account string `form:"account"`
-	part    int    `formL:"part"`
+	part    int    `form:"part"`
 }
 
 func GetAllReportList(c *gin.Context) {
@@ -18,6 +18,7 @@ func GetAllReportList(c *gin.Context) {
 		utils.JsonErrorResponse(c, 200501, "参数错误")
 		return
 	}
+	data.Account = utils.GetAccountByToken(c.GetHeader("Authorization"))
 	user, err := services.GetUserByAccount(data.Account)
 	if err != nil {
 		utils.JsonErrorResponse(c, 200501, "用户不存在")

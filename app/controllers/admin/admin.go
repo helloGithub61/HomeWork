@@ -24,6 +24,7 @@ func GetAllUserInfo(c *gin.Context) {
 		utils.JsonErrorResponse(c, 200501, "参数错误")
 		return
 	}
+	data.Account = utils.GetAccountByToken(c.GetHeader("Authorization"))
 	// 用户是否存在
 	user, err := services.GetUserByAccount(data.Account)
 	if err != nil {

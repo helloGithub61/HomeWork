@@ -3,16 +3,9 @@ package user
 import (
 	"CWall/app/services"
 	"CWall/app/utils"
-	"time"
 	"github.com/gin-gonic/gin"
+	"time"
 )
-
-func Reg_Get(c *gin.Context) {
-	account := utils.RandomString(11)
-	c.HTML(200, "reg.html", gin.H{
-		"account": account,
-	})
-}
 
 type RegDate struct {
 	Account  string `json:"account" binding:"required"`

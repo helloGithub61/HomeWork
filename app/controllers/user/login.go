@@ -5,12 +5,8 @@ import (
 	"CWall/app/services"
 	"CWall/app/utils"
 	"github.com/gin-gonic/gin"
-	"net/http"
 )
 
-func Login_Get(c *gin.Context) {
-	c.HTML(http.StatusOK, "login.html", gin.H{})
-}
 
 type LoginData struct {
 	Account  string `json:"account" binding:"required"`

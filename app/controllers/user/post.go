@@ -22,7 +22,7 @@ func CreatePost(c *gin.Context) {
 		utils.JsonErrorResponse(c, 200501, "参数错误")
 		return
 	}
-
+	data.Account = utils.GetAccountByToken(c.GetHeader("Authorization"))
 	// 业务逻辑
 	// 1.用户是否存在
 	_, err := services.GetUserByAccount(data.Account)
@@ -67,6 +67,7 @@ type GetPersonPostListData struct {
 func GetPersonPostList(c *gin.Context) {
 	var data GetPersonPostListData
 	c.ShouldBindJSON(&data)
+	data.Account = utils.GetAccountByToken(c.GetHeader("Authorization"))
 	var postList []models.Post
 	postList, err := services.GetPostListByAccount(data.Account)
 	if err != nil {
@@ -90,7 +91,7 @@ func UpdatePost(c *gin.Context) {
 		utils.JsonErrorResponse(c, 200501, "参数错误")
 		return
 	}
-
+	data.Account = utils.GetAccountByToken(c.GetHeader("Authorization"))
 	// 业务逻辑
 	// 1.用户是否存在
 	_, err := services.GetUserByAccount(data.Account)
@@ -130,6 +131,7 @@ func DeletePost(c *gin.Context) {
 		utils.JsonErrorResponse(c, 200501, "参数错误")
 		return
 	}
+	data.Account = utils.GetAccountByToken(c.GetHeader("Authorization"))
 	// 业务逻辑
 	// 1.用户是否存在
 	_, err := services.GetUserByAccount(data.Account)
@@ -169,6 +171,7 @@ func ReportPost(c *gin.Context) {
 		utils.JsonErrorResponse(c, 200501, "参数错误")
 		return
 	}
+	data.Account = utils.GetAccountByToken(c.GetHeader("Authorization"))
 	// 业务逻辑
 	// 1.用户是否存在
 	_, err := services.GetUserByAccount(data.Account)
@@ -191,10 +194,6 @@ func ReportPost(c *gin.Context) {
 	utils.JsonSuccess(c, nil)
 }
 
-type GetReportListData struct {
-	Account string `form:"account"`
-}
-
 type GetReportListResponse struct {
 	PostID  int    `json:"post_id"`
 	Content string `json:"content"`
@@ -203,12 +202,8 @@ type GetReportListResponse struct {
 }
 
 func GetReportList(c *gin.Context) {
-	var data GetReportListData
-	if err := c.ShouldBindQuery(&data); err != nil {
-		utils.JsonErrorResponse(c, 200501, "参数错误")
-		return
-	}
-	_, err := services.GetUserByAccount(data.Account)
+	Account := utils.GetAccountByToken(c.GetHeader("Authorization"))
+	_, err := services.GetUserByAccount(Account)
 	if err != nil {
 		utils.JsonErrorResponse(c, 200507, "用户不存在")
 		return
@@ -216,7 +211,7 @@ func GetReportList(c *gin.Context) {
 	// 业务逻辑
 	// 1.获取举报列表
 	var reportList []models.Report
-	reportList, err = services.GetReportList(data.Account)
+	reportList, err = services.GetReportList(Account)
 	if err != nil {
 		utils.JsonErrorResponse(c, 200513, "获取失败")
 		return
@@ -254,6 +249,7 @@ func LikePost(c *gin.Context) {
 		utils.JsonErrorResponse(c, 200501, "参数错误")
 		return
 	}
+	data.Account = utils.GetAccountByToken(c.GetHeader("Authorization"))
 	_, err := services.GetUserByAccount(data.Account)
 	if err != nil {
 		utils.JsonErrorResponse(c, 200507, "用户不存在")
@@ -315,7 +311,7 @@ func CollectPost(c *gin.Context) {
 }
 
 func GetLikePostList(c *gin.Context) {
-	Account := c.Query("account")
+	Account := utils.GetAccountByToken(c.GetHeader("Authorization"))
 	_, err := services.GetUserByAccount(Account)
 	if err != nil {
 		utils.JsonErrorResponse(c, 200507, "用户不存在")
@@ -338,7 +334,7 @@ func GetLikePostList(c *gin.Context) {
 	utils.JsonSuccess(c, resList)
 }
 func GetCollectPostList(c *gin.Context) {
-	Account := c.Query("account")
+	Account := utils.GetAccountByToken(c.GetHeader("Authorization"))
 	_, err := services.GetUserByAccount(Account)
 	if err != nil {
 		utils.JsonErrorResponse(c, 200507, "用户不存在")
@@ -361,7 +357,7 @@ func GetCollectPostList(c *gin.Context) {
 	utils.JsonSuccess(c, resList)
 }
 func ChangeUserAvatar(c *gin.Context) {
-	Account := c.Query("account")
+	Account := utils.GetAccountByToken(c.GetHeader("Authorization"))
 	file, _ := c.FormFile("file")
 	timestamp := time.Now().Unix()
 	dst := "./asset/pic/" + Account + "_" + fmt.Sprintf("%d", timestamp) + ".png"
